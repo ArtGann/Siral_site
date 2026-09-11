@@ -71,6 +71,18 @@ test("does not turn missing API or write requests into the HTML 404 page", async
   }
 });
 
+test("defines matching security headers for directly served static assets", async () => {
+  const headers = await readFile(new URL("../public/_headers", import.meta.url), "utf8");
+
+  assert.match(
+    headers,
+    /Permissions-Policy: camera=\(\), microphone=\(self "https:\/\/widgets\.leadconnectorhq\.com"\), geolocation=\(\)/,
+  );
+  assert.match(headers, /X-Content-Type-Options: nosniff/);
+  assert.match(headers, /Referrer-Policy: strict-origin-when-cross-origin/);
+  assert.match(headers, /X-Frame-Options: SAMEORIGIN/);
+});
+
 test("emits the files required by Sites packaging", async () => {
   await access(new URL("../dist/client/index.html", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
