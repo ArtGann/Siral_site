@@ -3,7 +3,10 @@ const withHeaders = (response) => {
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("X-Frame-Options", "SAMEORIGIN");
-  headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  headers.set(
+    "Permissions-Policy",
+    'camera=(), microphone=(self "https://widgets.leadconnectorhq.com"), geolocation=()',
+  );
 
   return new Response(response.body, {
     status: response.status,
